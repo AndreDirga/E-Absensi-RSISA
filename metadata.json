@@ -1,0 +1,11 @@
+{
+  "name": "E-ABSENSI RSI Sultan Agung Banjarbaru",
+  "description": "Sistem Absensi Online Pegawai RSI Sultan Agung Banjarbaru (E-ABSENSI RSISA) dengan Autentikasi Login/Registrasi Pegawai Baru, Verifikasi Wajah AI Biometrik, Geofencing Radius Jarak GPS, Manajemen Shift & Rekap Kehadiran.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
