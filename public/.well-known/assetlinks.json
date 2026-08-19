@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.rsisa.eabsensi",
+        "sha256_cert_fingerprints": ["7E:E0:2F:98:F7:BF:6E:7B:D0:C1:56:54:6A:7D:AD:E2:00:D0:7F:FC:07:F5:CE:D6:D0:15:71:61:7D:78:31:AE"]
+      }
+    }]
