@@ -1,1 +1,26 @@
-
+{
+  "background_color": "#ffffff",
+  "description": "Sistem Presensi Digital Pegawai RSI Sultan Agung Banjarbaru dengan Face Verification & Geofence GPS",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "E-Absensi RSISA",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "E-Absensi RSISA",
+  "start_url": "https://e-absensi-rsisa-h7co.vercel.app/",
+  "theme_color": "#05a404",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}
