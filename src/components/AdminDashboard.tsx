@@ -30,6 +30,7 @@ interface AdminDashboardProps {
   onUpdateHospitalConfig: (config: HospitalLocation) => void;
   onUpdateLeaveStatus: (leaveId: string, status: 'approved' | 'rejected') => void;
   onResetAllData: () => void;
+  onOpenWorkspace?: () => void;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
@@ -40,6 +41,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onUpdateHospitalConfig,
   onUpdateLeaveStatus,
   onResetAllData,
+  onOpenWorkspace,
 }) => {
   const [adminTab, setAdminTab] = useState<'monitoring' | 'geofence' | 'persetujuan' | 'pegawai'>('monitoring');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -155,13 +157,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {onOpenWorkspace && (
+              <button
+                onClick={onOpenWorkspace}
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-700 hover:bg-emerald-600 text-white shadow-xs flex items-center gap-2 transition-colors cursor-pointer uppercase tracking-wider"
+              >
+                <FileSpreadsheet className="w-4 h-4 text-emerald-300" />
+                <span>Google Sheets & Drive</span>
+              </button>
+            )}
+
             <button
               onClick={handleExportFullCSV}
-              className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs flex items-center gap-2 transition-colors cursor-pointer uppercase tracking-wider"
+              className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 shadow-xs flex items-center gap-2 transition-colors cursor-pointer uppercase tracking-wider"
             >
-              <FileSpreadsheet className="w-4 h-4" />
-              <span>Ekspor CSV / Excel</span>
+              <Download className="w-4 h-4" />
+              <span>Ekspor CSV</span>
             </button>
           </div>
         </div>

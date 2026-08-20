@@ -320,67 +320,112 @@ export const LocationRadar: React.FC<LocationRadarProps> = ({
         </div>
       )}
 
-      {/* Visual Interactive Radar & Geofence Map */}
-      <div className="relative w-full h-40 rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center mb-3.5 shadow-inner">
-        {/* Radar Concentric Rings */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-16 h-16 rounded-full border border-emerald-500/20 border-dashed animate-ping opacity-25" style={{ animationDuration: '3s' }} />
-          <div className="absolute w-28 h-28 rounded-full border-2 border-emerald-400/60 bg-emerald-500/10 flex items-center justify-center">
-            <span className="absolute -top-3.5 text-[9px] font-bold text-emerald-300 bg-slate-950 px-1.5 py-0.2 rounded border border-emerald-500/40 uppercase">
-              Radius {hospitalConfig.allowedRadiusMeters}m
+      {/* Toggle View Mode: Radar vs Google Maps */}
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-xl border border-slate-200">
+          <button
+            type="button"
+            onClick={() => setMapViewMode('radar')}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+              mapViewMode === 'radar'
+                ? 'bg-white text-slate-800 shadow-xs'
+                : 'text-slate-500 hover:text-slate-700'
+            }`}
+          >
+            <Compass className="w-3 h-3 text-emerald-600" />
+            <span>Radar HUD</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setMapViewMode('googlemaps')}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+              mapViewMode === 'googlemaps'
+                ? 'bg-emerald-700 text-white shadow-xs'
+                : 'text-slate-500 hover:text-slate-700'
+            }`}
+          >
+            <MapIcon className="w-3 h-3" />
+            <span>Google Maps</span>
+          </button>
+        </div>
+
+        <span className="text-[10px] text-slate-400 font-mono">
+          Radius: {hospitalConfig.allowedRadiusMeters}m
+        </span>
+      </div>
+
+      {/* Visual Interactive View: Google Maps or Radar HUD */}
+      {mapViewMode === 'googlemaps' ? (
+        <div className="mb-3.5">
+          <HospitalGoogleMap
+            hospitalLocation={hospitalConfig}
+            userLocation={currentCoord}
+            isMockDetected={Boolean(antiSpoofReport?.isMockDetected)}
+            heightClass="h-44"
+          />
+        </div>
+      ) : (
+        <div className="relative w-full h-40 rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center mb-3.5 shadow-inner">
+          {/* Radar Concentric Rings */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-16 h-16 rounded-full border border-emerald-500/20 border-dashed animate-ping opacity-25" style={{ animationDuration: '3s' }} />
+            <div className="absolute w-28 h-28 rounded-full border-2 border-emerald-400/60 bg-emerald-500/10 flex items-center justify-center">
+              <span className="absolute -top-3.5 text-[9px] font-bold text-emerald-300 bg-slate-950 px-1.5 py-0.2 rounded border border-emerald-500/40 uppercase">
+                Radius {hospitalConfig.allowedRadiusMeters}m
+              </span>
+            </div>
+            <div className="absolute w-36 h-36 rounded-full border border-slate-800" />
+            <div className="absolute w-full h-px bg-slate-800/80" />
+            <div className="absolute h-full w-px bg-slate-800/80" />
+          </div>
+
+          {/* Center: Hospital Pin */}
+          <div className="relative z-10 flex flex-col items-center">
+            <div className="p-2 rounded-xl bg-emerald-600 text-white shadow-md ring-2 ring-emerald-400">
+              <Building className="w-3.5 h-3.5" />
+            </div>
+            <span className="mt-1 text-[9px] font-bold text-emerald-300 bg-slate-900 px-2 py-0.5 rounded-full border border-emerald-700/60 uppercase tracking-wider">
+              RSI SULTAN AGUNG
             </span>
           </div>
-          <div className="absolute w-36 h-36 rounded-full border border-slate-800" />
-          <div className="absolute w-full h-px bg-slate-800/80" />
-          <div className="absolute h-full w-px bg-slate-800/80" />
-        </div>
 
-        {/* Center: Hospital Pin */}
-        <div className="relative z-10 flex flex-col items-center">
-          <div className="p-2 rounded-xl bg-emerald-600 text-white shadow-md ring-2 ring-emerald-400">
-            <Building className="w-3.5 h-3.5" />
-          </div>
-          <span className="mt-1 text-[9px] font-bold text-emerald-300 bg-slate-900 px-2 py-0.5 rounded-full border border-emerald-700/60 uppercase tracking-wider">
-            RSI SULTAN AGUNG
-          </span>
-        </div>
-
-        {/* User GPS Position Beacon */}
-        <div 
-          className="absolute z-20 transition-all duration-500 flex flex-col items-center"
-          style={{
-            transform: geofence.isInside
-              ? 'translate(22px, -16px)'
-              : 'translate(62px, -38px)',
-          }}
-        >
-          <div className="relative">
-            <div className={`w-3.5 h-3.5 rounded-full flex items-center justify-center ring-4 ${
-              antiSpoofReport?.isMockDetected
-                ? 'bg-rose-500 ring-rose-500/40 animate-bounce'
-                : geofence.isInside
-                ? 'bg-emerald-400 ring-emerald-400/40 animate-pulse'
-                : 'bg-amber-500 ring-amber-500/40'
-            }`}>
-              <div className="w-1 h-1 bg-white rounded-full" />
+          {/* User GPS Position Beacon */}
+          <div 
+            className="absolute z-20 transition-all duration-500 flex flex-col items-center"
+            style={{
+              transform: geofence.isInside
+                ? 'translate(22px, -16px)'
+                : 'translate(62px, -38px)',
+            }}
+          >
+            <div className="relative">
+              <div className={`w-3.5 h-3.5 rounded-full flex items-center justify-center ring-4 ${
+                antiSpoofReport?.isMockDetected
+                  ? 'bg-rose-500 ring-rose-500/40 animate-bounce'
+                  : geofence.isInside
+                  ? 'bg-emerald-400 ring-emerald-400/40 animate-pulse'
+                  : 'bg-amber-500 ring-amber-500/40'
+              }`}>
+                <div className="w-1 h-1 bg-white rounded-full" />
+              </div>
             </div>
+            <span className={`mt-1 text-[8px] font-bold px-1.5 py-0.2 rounded shadow ${
+              antiSpoofReport?.isMockDetected
+                ? 'bg-rose-900 text-rose-200'
+                : geofence.isInside 
+                ? 'bg-emerald-900 text-emerald-200' 
+                : 'bg-amber-900 text-amber-200'
+            }`}>
+              {antiSpoofReport?.isMockDetected ? 'SPOOFED' : `Pegawai (${formatDistance(geofence.distanceMeters)})`}
+            </span>
           </div>
-          <span className={`mt-1 text-[8px] font-bold px-1.5 py-0.2 rounded shadow ${
-            antiSpoofReport?.isMockDetected
-              ? 'bg-rose-900 text-rose-200'
-              : geofence.isInside 
-              ? 'bg-emerald-900 text-emerald-200' 
-              : 'bg-amber-900 text-amber-200'
-          }`}>
-            {antiSpoofReport?.isMockDetected ? 'SPOOFED' : `Pegawai (${formatDistance(geofence.distanceMeters)})`}
-          </span>
-        </div>
 
-        {/* Top Left Tag: Coordinates */}
-        <div className="absolute top-2 left-2 bg-slate-900/90 backdrop-blur-md px-2 py-0.5 rounded text-[9px] font-mono text-slate-400 border border-slate-800">
-          <span>Lat: {currentCoord.latitude.toFixed(5)} | Lng: {currentCoord.longitude.toFixed(5)}</span>
+          {/* Top Left Tag: Coordinates */}
+          <div className="absolute top-2 left-2 bg-slate-900/90 backdrop-blur-md px-2 py-0.5 rounded text-[9px] font-mono text-slate-400 border border-slate-800">
+            <span>Lat: {currentCoord.latitude.toFixed(5)} | Lng: {currentCoord.longitude.toFixed(5)}</span>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Admin Testing / Simulation Toggle */}
       <div className="pt-1">

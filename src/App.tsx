@@ -31,6 +31,7 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { ShiftAndIslamicInfo } from './components/ShiftAndIslamicInfo';
 import { PermissionPromptModal } from './components/PermissionPromptModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
+import { GoogleWorkspaceModal } from './components/GoogleWorkspaceModal';
 import { Building2, Heart, Sparkles, ShieldAlert, Lock, UserCheck, ArrowRight } from 'lucide-react';
 
 export default function App() {
@@ -46,6 +47,7 @@ export default function App() {
   const [shifts, setShifts] = useState<ShiftDefinition[]>(getStoredShifts());
   const [activeTab, setActiveTab] = useState<'presensi' | 'riwayat' | 'izin' | 'admin' | 'jadwal_doa'>('presensi');
   const [showPermissionModal, setShowPermissionModal] = useState<boolean>(false);
+  const [showWorkspaceModal, setShowWorkspaceModal] = useState<boolean>(false);
 
   // Load initial stored data & check permissions prompt for new users
   useEffect(() => {
@@ -194,6 +196,7 @@ export default function App() {
         hospitalConfig={hospitalConfig}
         todayCount={todayClockInCount}
         onOpenPermissions={() => setShowPermissionModal(true)}
+        onOpenWorkspace={() => setShowWorkspaceModal(true)}
         onLogout={handleLogout}
       />
 
@@ -213,6 +216,7 @@ export default function App() {
           <AttendanceHistory
             attendances={attendances}
             activeEmployee={activeEmployee}
+            onOpenWorkspace={() => setShowWorkspaceModal(true)}
           />
         )}
 
@@ -234,6 +238,7 @@ export default function App() {
               onUpdateHospitalConfig={handleUpdateHospitalConfig}
               onUpdateLeaveStatus={handleUpdateLeaveStatus}
               onResetAllData={handleResetAllData}
+              onOpenWorkspace={() => setShowWorkspaceModal(true)}
             />
           ) : (
             <div className="max-w-xl mx-auto my-8 bg-white rounded-3xl p-6 sm:p-8 border border-rose-200 shadow-xl text-center">
@@ -274,6 +279,15 @@ export default function App() {
           <ShiftAndIslamicInfo />
         )}
       </main>
+
+      {/* Google Workspace Cloud Sync & Export Modal */}
+      {showWorkspaceModal && (
+        <GoogleWorkspaceModal
+          attendances={attendances}
+          activeEmployee={activeEmployee}
+          onClose={() => setShowWorkspaceModal(false)}
+        />
+      )}
 
       {/* Onboarding / Permission Request Modal for Camera & GPS */}
       <PermissionPromptModal

@@ -15,7 +15,9 @@ import {
   Activity,
   Shield,
   Camera,
-  LogOut
+  LogOut,
+  HardDrive,
+  FileSpreadsheet
 } from 'lucide-react';
 import { Employee, HospitalLocation, PrayerTimeInfo } from '../types';
 import { getBanjarbaruPrayerTimes } from '../utils/prayerTimes';
@@ -28,6 +30,7 @@ interface NavbarProps {
   hospitalConfig: HospitalLocation;
   todayCount: number;
   onOpenPermissions?: () => void;
+  onOpenWorkspace?: () => void;
   onLogout?: () => void;
 }
 
@@ -38,6 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   hospitalConfig,
   todayCount,
   onOpenPermissions,
+  onOpenWorkspace,
   onLogout,
 }) => {
   const [timeString, setTimeString] = useState<string>('');
@@ -74,7 +78,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-xs">
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
       {/* Top Banner: Islamic Hospital Greeting & Prayer Status */}
       <div className="bg-slate-900 text-white text-xs px-4 sm:px-8 py-1.5 flex flex-wrap justify-between items-center gap-2 border-b border-slate-800">
         <div className="flex items-center gap-2 font-medium tracking-wide">
@@ -99,7 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           
-          {/* Hospital Logo & Brand matching Professional Polish Header */}
+          {/* Hospital Logo & Brand */}
           <div className="flex items-center gap-2.5 sm:gap-3.5">
             <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-2xl flex items-center justify-center shrink-0 shadow-xs border border-emerald-200 ring-2 ring-emerald-500/20 p-1">
               <RsiLogo variant="emblem-only" className="w-full h-full" />
@@ -128,8 +132,21 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* Right: Employee Profile & Switcher */}
-          <div className="flex items-center gap-1.5 sm:gap-3">
+          {/* Right: Actions & Profile */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5">
+            {/* Google Workspace Cloud Sync Button */}
+            {onOpenWorkspace && (
+              <button
+                id="btn-open-workspace-nav"
+                onClick={onOpenWorkspace}
+                className="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 transition-colors cursor-pointer"
+                title="Google Drive & Google Sheets Integration"
+              >
+                <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
+                <span className="hidden md:inline">Google Workspace</span>
+              </button>
+            )}
+
             {onOpenPermissions && (
               <button
                 id="btn-open-permissions-nav"

@@ -13,7 +13,9 @@ import {
   AlertTriangle,
   X,
   Printer,
-  ChevronRight
+  ChevronRight,
+  FileSpreadsheet,
+  HardDrive
 } from 'lucide-react';
 import { AttendanceRecord, Employee } from '../types';
 import { formatDistance } from '../utils/geo';
@@ -21,11 +23,13 @@ import { formatDistance } from '../utils/geo';
 interface AttendanceHistoryProps {
   attendances: AttendanceRecord[];
   activeEmployee: Employee;
+  onOpenWorkspace?: () => void;
 }
 
 export const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
   attendances,
   activeEmployee,
+  onOpenWorkspace,
 }) => {
   const [filterType, setFilterType] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -206,9 +210,20 @@ export const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
             Pulang
           </button>
 
+          {onOpenWorkspace && (
+            <button
+              onClick={onOpenWorkspace}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white shadow-xs transition-colors cursor-pointer"
+              title="Ekspor ke Google Sheets & Backup ke Drive"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5" />
+              <span>Google Sheets</span>
+            </button>
+          )}
+
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-colors ml-auto cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-colors ml-auto cursor-pointer"
             title="Download CSV"
           >
             <Download className="w-3.5 h-3.5" />
